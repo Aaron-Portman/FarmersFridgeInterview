@@ -23,18 +23,23 @@ export default class App extends Component {
     this.state.pastResults = []
     localStorage.clear()
   }
-  //Incomplete, when complete this function would maintain the local storage of the 10 most recent queries
+  //uses Local storage to save most recent queries
   setPastResults = (obj) => {
-    let curResults = obj
+    let text = obj.text
+    let parsedData = obj.parsedData
+    let curResults = {text, parsedData}
+    curResults = JSON.stringify(curResults)
     let pastResults = localStorage.getItem("pastResults")
     if(pastResults){
       this.state.pastResults.push(pastResults)
-      if(this.state.pastResults && this.state.pastResults.length < 10) {
+      if(this.state.pastResults.length < 10) {
         this.state.pastResults.push(curResults)
-      } else if(this.state.pastResults && this.state.pastResults.length == 10) {
+      } else if(this.state.pastResults.length == 10) {
         this.state.pastResults.shift()
         this.state.pastResults.push(curResults)
       }
+    } else{
+      pastResults = curResults
     }
     localStorage.setItem("pastResults", this.state.pastResults)
   }
