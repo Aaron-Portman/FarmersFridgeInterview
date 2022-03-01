@@ -1,0 +1,42 @@
+/* List */
+ul {
+  grid-column: 2;
+  counter-reset: index;
+  padding: 0;
+  max-width: 300px;
+}
+.results {
+}
+/* List element */
+li {
+  counter-increment: index;
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  box-sizing: border-box;
+}
+
+/* Element counter */
+li::before,
+.results {
+  content: counters(index, ".", decimal-leading-zero);
+  font-weight: bold;
+  min-width: 50px;
+  padding-right: 2px;
+  align-self: flex-start;
+  background-image: linear-gradient(to bottom, #368007, rgb(193, 231, 191));
+  background-attachment: fixed;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Element separation */
+li + li {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.listResultsContainer {
+  margin-top: ;
+  display: grid;
+  grid-template-columns: 40% 20% 40%;
+}

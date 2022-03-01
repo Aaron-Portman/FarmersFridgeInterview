@@ -1,25 +1,87 @@
-import logo from './logo.svg';
+import logo from "./logo.png"
 import './App.css';
+import PastResults from "./Components/PastResults/PastResults"
+import TextInput from "./Components/TextInput/TextInput"
+import Results from "./Components/Results/Results"
+import React, { Component } from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+
+export default class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      results: [],
+      pastResults: []
+    }
+
+  }
+ 
+  clearHistory = (e) =>{
+    console.log("clearing history")
+    this.state.pastResults = []
+    localStorage.clear()
+  }
+
+  setPastResults = (obj) => {
+    let curResults = obj
+    let pastResults = localStorage.getItem("pastResults")
+    if(pastResults){
+      this.state.pastResults.push(pastResults)
+      if(this.state.pastResults && this.state.pastResults.length < 10) {
+        this.state.pastResults.push(curResults)
+      } else if(this.state.pastResults && this.state.pastResults.length == 10) {
+        this.state.pastResults.shift()
+        this.state.pastResults.push(curResults)
+      }
+    }
+    localStorage.setItem("pastResults", this.state.pastResults)
+  }
+
+  setResults = (results) => {
+    if(results){
+      //functions like a queue, should change to that data structure when I can
+      if(this.state.pastResults.length > 10){
+        this.state.pastResults.shift()
+      }
+      this.state.pastResults.push(results)
+      this.setState({
+        results
+      })
+    }
+  }
+
+  render() {
+    return <div className="app">
+      <div className="header">
+        <div className="logo">
+          <img src={logo} alt="Farmer's Fridge Logo"/>
+        </div>
+        <div className="title">
+          <h2>Farmer's Fridge Frequency Analysis Tool</h2>
+        </div>
+      </div>
+      <div className="body">
+        <div className="clearHistory">
+          <button className="clearHistoryButton" onClick={(e) => this.clearHistory()}>
+            Clear History
+          </button>
+        </div>
+        <div className="textInput">
+          <TextInput setResults = {this.setResults} setPastResults = {this.setPastResults}/>
+        </div>
+        {this.state.results && this.state.results.length > 0? 
+        <div className="results">
+          <Results results = {this.state.results}/>
+        </div>
+        : null}
+        {this.state.pastResults && this.state.pastResults.length > 0? 
+        <div className="pastResults">
+          <PastResults pastResults = {this.state.pastResults}/>
+        </div>
+        : null}
+      </div>
     </div>
-  );
+  }
 }
-
-export default App;
