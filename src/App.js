@@ -17,13 +17,13 @@ export default class App extends Component {
     }
 
   }
- 
+  //Clears local storage history
   clearHistory = (e) =>{
     console.log("clearing history")
     this.state.pastResults = []
     localStorage.clear()
   }
-
+  //Incomplete, when complete this function would maintain the local storage of the 10 most recent queries
   setPastResults = (obj) => {
     let curResults = obj
     let pastResults = localStorage.getItem("pastResults")
@@ -38,10 +38,9 @@ export default class App extends Component {
     }
     localStorage.setItem("pastResults", this.state.pastResults)
   }
-
+  // sets the current results from inputted text
   setResults = (results) => {
     if(results){
-      //functions like a queue, should change to that data structure when I can
       if(this.state.pastResults.length > 10){
         this.state.pastResults.shift()
       }

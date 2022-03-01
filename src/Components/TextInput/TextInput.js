@@ -5,7 +5,7 @@ export default function TextInput(props) {
 
   const [displayInput, setDisplayInput] = useState(true)
 
-  
+  // dictionaries used to track all the occurrences of possible suffixes
   let suffixLToOccurrencesDict = {}
   let suffixLZToOccurrencesDict = {}
   let suffixEVMToOccurrencesDict = {}
@@ -13,7 +13,8 @@ export default function TextInput(props) {
   let suffixPZLAToOccurrencesDict = {}
   let suffixPZLAZToOccurrencesDict = {}
   let suffixEZLToOccurrencesDict = {}
-
+  
+  // main function that parses data
   const handleData = (e) => {
     setDisplayInput(false)
     e.preventDefault()
@@ -30,7 +31,7 @@ export default function TextInput(props) {
     reader.readAsText(e.target.files[0])
     
   }
-
+  // does the actual parsing and figuring out of if a word is a root
   const parseData = (text) => {
     let top25 = []
     let suffixesToRemove = ["L", "LZ", "EVM", "ZQ"]
@@ -44,6 +45,7 @@ export default function TextInput(props) {
       if(word === null || word === undefined || word === ""){
         return
       }
+  
       suffixesToSub.forEach((suffix)=>{
         if(word.endsWith(suffix[0])){
           word = word.substring(0, word.length-suffix[0].length) + suffix[1]
@@ -120,6 +122,7 @@ export default function TextInput(props) {
     top25 = get25(allWordsDict)
     return top25
   }
+  //determines if word is a word or just happens to end in valid suffix
   const checkIfRoot = (word) => {
     let numOccurencesInDicts = 0
     let needToSubLetterArr = [0,0,0]
@@ -156,6 +159,7 @@ export default function TextInput(props) {
     }
     return [numOccurencesInDicts >= 2, needToSubLetterArr]
   }
+  //tracks occurrences of potential root words
   const addToSuffixOccurencesDict = (word, suffix) =>{
     switch(suffix) {
       case "L":
@@ -191,6 +195,7 @@ export default function TextInput(props) {
 
     }
   }
+  //returns the top 25 words
   const get25 = (dict) => {
     var items = Object.keys(dict).map(
       (key) => { 
